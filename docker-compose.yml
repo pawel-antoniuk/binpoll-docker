@@ -1,0 +1,50 @@
+version: "3"
+services:
+  webapp:
+#    image: pantoniuk/binpoll
+    build: webapp
+    depends_on:
+      - database
+    command: ["./wait-for-it.sh", "database:3306", "-t", "30", "--", "bash", "/app/configure-backend.sh"]
+    tty: true
+    environment:
+      - BINPOLL_DB_NAME=binpoll
+      - BINPOLL_DB_USER=root
+      - BINPOLL_DB_PASS=binpoll
+      - BINPOLL_DB_PORT=3306
+      - BINPOLL_DB_HOST=database
+    # deploy:
+    #   replicas: 1
+    #   resources:
+    #     limits:
+    #       cpus: "0.5"
+    #       memory: 500M
+    #   restart_policy:
+    #     condition: on-failure
+    ports:
+      - "80:80"
+      - "8000:8000"
+    networks:
+      - webnet
+  database:
+ #   image: mariadb:10.4.5-bionic
+    build: database
+    environment:
+      - MYSQL_ROOT_PASSWORD=binpoll
+      - MYSQL_DATABASE=binpoll
+      - MYSQL_USER=binpoll
+      - MYSQL_PASSWORD=binpoll
+    # deploy:
+    #   replicas: 1
+    #   resources:
+    #     limits:
+    #       cpus: "0.5"
+    #       memory: 500M
+    #   restart_policy:
+    #     condition: on-failure
+    ports:
+      - "3306:3306"
+    networks:
+      - webnet
+networks:
+  webnet:
