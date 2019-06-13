@@ -16,9 +16,13 @@ ENV BINPOLL_DB_NAME=binpoll
 ENV BINPOLL_DB_USER=binpoll
 ENV BINPOLL_DB_PASS=binpoll
 ENV BINPOLL_DB_PORT=3316
+ENV BINPOLL_API_URL=http://127.0.0.1:8000/
+ENV BINPOLL_SOUND_URL=http://127.0.0.1:8000/static/poll_sounds/
 
 # copy installation scripts
 COPY node_setup_10.sh /app/
+COPY create-superuser.sh /app/
+COPY update-front-config.sh /app/
 
 # install dependencies
 RUN cat /app/node_setup_10.sh | bash \
@@ -52,21 +56,3 @@ RUN cd ${BINPOLL_FRONT_SRC} \
     && ln -s ${BINPOLL_FRONT_SRC}/dist/binpoll-front ${BINPOLL_FRONT_TARGET}
 
 EXPOSE 80 8000
-
-#ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
-
-
-#RUN apk add bash openrc apache2
-#CMD ["bash"]EXPOSE 80
-
-#FROM httpd:2.4-alpine
-#WORKDIR /app
-#COPY . /app
-
-#RUN apk add bash openrc
-#CMD ["bash"]
-
-#RUN pip install --trusted-host pypi.python.org -r requirements.txt
-#EXPOSE 80
-#ENV NAME World
-#CMD ["python", "app.py"]

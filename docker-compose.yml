@@ -7,9 +7,10 @@ services:
       - database
     command: ["./wait-for-it.sh", "database:3306", "-t", "30", "--", "bash", "/app/configure-backend.sh"]
     tty: true
+    container_name: binpoll
     environment:
       - BINPOLL_DB_NAME=binpoll
-      - BINPOLL_DB_USER=root
+      - BINPOLL_DB_USER=binpoll
       - BINPOLL_DB_PASS=binpoll
       - BINPOLL_DB_PORT=3306
       - BINPOLL_DB_HOST=database
@@ -29,6 +30,7 @@ services:
   database:
  #   image: mariadb:10.4.5-bionic
     build: database
+    container_name: binpoll-db
     environment:
       - MYSQL_ROOT_PASSWORD=binpoll
       - MYSQL_DATABASE=binpoll

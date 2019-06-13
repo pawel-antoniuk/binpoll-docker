@@ -20,8 +20,14 @@ ENV BINPOLL_DB_HOST=database
 
 EXPOSE 80 8000
 
+RUN mkdir /app/manage
+
 # copy installation scripts
 COPY node_setup_10.sh /app/
+COPY manage/update-back.sh /app/manage/
+COPY manage/update-front.sh /app/manage/
+COPY manage/update-back.sh /app/manage/
+COPY manage/reload.sh /app/manage/
 
 # install dependencies
 RUN cat /app/node_setup_10.sh | bash \
@@ -46,30 +52,10 @@ COPY configure-backend.sh   /app/
 COPY binpoll-front          ${BINPOLL_FRONT_SRC}
 COPY binpoll-back           ${BINPOLL_BACK_SRC}
 COPY populate_db.py         /app/
-ADD  poll_sounds.tar        /app/
+ADD  ./assets/poll_sounds.tar /app/
 
 # build and mount frontend
 RUN cd ${BINPOLL_FRONT_SRC} \
     && npm install \
     && npm run ng build \
     && ln -s ${BINPOLL_FRONT_SRC}/dist/binpoll-front ${BINPOLL_FRONT_TARGET}
-
-#CMD ["./wait-for-it.sh", "database:3306", "-t", "20", "--", "bash", "/app/configure-backend.sh"]
-
-#ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
-
-
-#RUN apk add bash openrc apache2
-#CMD ["bash"]EXPOSE 80
-
-#FROM httpd:2.4-alpine
-#WORKDIR /app
-#COPY . /app
-
-#RUN apk add bash openrc
-#CMD ["bash"]
-
-#RUN pip install --trusted-host pypi.python.org -r requirements.txt
-#EXPOSE 80
-#ENV NAME World
-#CMD ["python", "app.py"]

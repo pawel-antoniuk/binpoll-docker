@@ -14,4 +14,4 @@ cd "$BINPOLL_BACK_SRC"/binpoll_back \
     && a2ensite binpoll-front \
     && a2ensite binpoll-back \
     && apache2ctl start \
-    && bash
+    && tail -f /dev/null

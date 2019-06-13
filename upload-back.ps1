@@ -1,0 +1,1 @@
+docker cp webapp/binpoll-back/. binpoll:/app/binpoll-back
