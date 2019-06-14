@@ -5,6 +5,7 @@ ARG BINPOLL_FRONT_TARGET=/var/www/binpoll-front
 ARG BINPOLL_BACK_TARGET=/var/www/binpoll-back
 ARG BINPOLL_FRONT_SRC=/app/binpoll-front
 ARG BINPOLL_BACK_SRC=/app/binpoll-back
+ARG BINPOLL_API_URL=http://127.0.0.1:8000/
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV BINPOLL_FRONT_TARGET ${BINPOLL_FRONT_TARGET}
@@ -15,14 +16,14 @@ ENV BINPOLL_BACK_SRC ${BINPOLL_BACK_SRC}
 ENV BINPOLL_DB_NAME=binpoll
 ENV BINPOLL_DB_USER=binpoll
 ENV BINPOLL_DB_PASS=binpoll
-ENV BINPOLL_DB_PORT=3316
-ENV BINPOLL_API_URL=http://127.0.0.1:8000/
-ENV BINPOLL_SOUND_URL=http://127.0.0.1:8000/static/poll_sounds/
+ENV BINPOLL_DB_PORT=3306
+ENV BINPOLL_API_URL=${BINPOLL_API_URL}
+ENV BINPOLL_SOUND_URL=${BINPOLL_API_URL}/static/poll_sounds/
 
 # copy installation scripts
 COPY node_setup_10.sh /app/
 COPY create-superuser.sh /app/
-COPY update-front-config.sh /app/
+COPY update-front-config.py /app/
 
 # install dependencies
 RUN cat /app/node_setup_10.sh | bash \
@@ -53,6 +54,8 @@ ADD  poll_sounds.tar        /app/
 RUN cd ${BINPOLL_FRONT_SRC} \
     && npm install \
     && npm run ng build \
-    && ln -s ${BINPOLL_FRONT_SRC}/dist/binpoll-front ${BINPOLL_FRONT_TARGET}
+    && ln -s ${BINPOLL_FRONT_SRC}/dist/binpoll-front ${BINPOLL_FRONT_TARGET} \
+    && . /app/venv/bin/activate \
+    && python /app/update-front-config.py
 
 EXPOSE 80 8000
