@@ -1,32 +1,30 @@
 version: "3"
 services:
-  webapp:
-    image: pantoniuk/binpoll
-    build: webapp
-    depends_on:
-      - database
-    command: ["./wait-for-it.sh", "database:3306", "-t", "30", "--", "bash", "/app/configure-backend.sh"]
+  binpoll-back:
+    image: pantoniuk/binpoll-back
+    build: webapp-back
+    command: ["./wait-for-it.sh", "database:3306", "-t", "30", "--", "bash", "/app/configure.sh"]
     tty: true
-    container_name: binpoll
+    container_name: binpoll-back
     environment:
       - BINPOLL_DB_NAME=binpoll
       - BINPOLL_DB_USER=binpoll
       - BINPOLL_DB_PASS=binpoll
       - BINPOLL_DB_PORT=3306
       - BINPOLL_DB_HOST=database
-    # deploy:
-    #   replicas: 1
-    #   resources:
-    #     limits:
-    #       cpus: "0.5"
-    #       memory: 500M
-    #   restart_policy:
-    #     condition: on-failure
     ports:
-      - "80:80"
-      - "8000:8000"
+      - "8000:80"
     networks:
       - webnet
+  binpoll-front:
+    image: pantoniuk/binpoll-front
+    build: webapp-front
+    environment:
+      - BINPOLL_API_URL=http://127.0.0.1:8000/
+    tty: true
+    container_name: binpoll-front
+    ports:
+      - "80:80"
   database:
     image: pantoniuk/binpoll-db
     build: database

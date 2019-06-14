@@ -15,10 +15,17 @@ sql_insert_audiosample = 'insert into data_collector_audiosample (filepath) valu
 sql_insert_audioset = 'insert into data_collector_audioset (id) values (1)'
 sql_insert_audioset_samples = 'insert into data_collector_audioset_samples (audioset_id, audiosample_id) values (%s, %s)'
 
+
+sql_delete_comment = 'delete from data_collector_comment'
+sql_delete_problem = 'delete from data_collector_problem'
+sql_delete_polldata = 'delete from data_collector_polldata'
 sql_delete_audiosample = 'delete from data_collector_audiosample'
 sql_delete_audioset = 'delete from data_collector_audioset'
 sql_delete_audioset_samples = 'delete from data_collector_audioset_samples'
 
+cursor.execute(sql_delete_comment)
+cursor.execute(sql_delete_problem)
+cursor.execute(sql_delete_polldata)
 cursor.execute(sql_delete_audioset_samples)
 cursor.execute(sql_delete_audioset)
 cursor.execute(sql_delete_audiosample)

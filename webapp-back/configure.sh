@@ -8,10 +8,9 @@ cd "$BINPOLL_BACK_SRC"/binpoll_back \
     && cd /app && python populate_db.py \
     && ln -s "$BINPOLL_BACK_SRC"/binpoll_back "$BINPOLL_BACK_TARGET" \
     && ln -s /app/poll_sounds "$BINPOLL_BACK_SRC"/binpoll_back/static \
-    && a2enmod rewrite \
     && a2enmod headers \
+    && a2enmod ratelimit \
     && a2dissite 000-default \
-    && a2ensite binpoll-front \
     && a2ensite binpoll-back \
     && apache2ctl start \
     && tail -f /dev/null
