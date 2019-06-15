@@ -1,0 +1,6 @@
+[submodule "webapp-front/binpoll-front"]
+	path = webapp-front/binpoll-front
+	url = https://github.com/Niekarp/binpoll-front
+[submodule "webapp-back/binpoll-back"]
+	path = webapp-back/binpoll-back
+	url = https://github.com/pawel-antoniuk/binpoll-back
