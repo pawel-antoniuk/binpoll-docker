@@ -1,4 +1,4 @@
-FROM mariadb:10
+FROM mariadb:10.4.5
 
 ENV MYSQL_ROOT_PASSWORD=binpoll
 ENV MYSQL_DATABASE=binpoll
